@@ -1,0 +1,139 @@
+<ion-header>
+  <mat-toolbar color="primary">
+       <button mat-icon-button (click)="gotoBack();">
+            <i class="icon icon-arrow-left"></i>
+       </button>
+       <div class="title center"> Create Customer </div>
+      <button mat-icon-button class="align-right" (click)="goToHome();">
+       <i class="icon icon-home"></i>
+      </button>	
+  </mat-toolbar>
+</ion-header>
+<ion-content padding>
+<form [formGroup]="createCustomerForm">
+ <section>
+   <!-- customerName -->
+   <mat-grid-list cols="1" rowHeight="50px">
+     <mat-grid-tile colspan="1" class="left">
+       <mat-form-field>
+         <input matInput formControlName="customerName" type="text" placeholder="Customer Name *" >
+       </mat-form-field>	
+     </mat-grid-tile>
+   </mat-grid-list>
+   
+  <!-- Address  -->
+  <mat-grid-list cols="1" rowHeight="50px">
+      <mat-grid-tile colspan="1" class="left">
+        <mat-form-field>
+          <input matInput formControlName="address" type="text" placeholder="Address *"  maxlength="100">
+          </mat-form-field>
+      </mat-grid-tile>
+  </mat-grid-list>
+  <!-- Country, State, City-->
+  <mat-grid-list cols="1"  rowHeight="50px">
+      <select-search 
+        formControlName="country" [data]="countries" placeholderLabel="Select Country *" itemViewValueKey="countryName" 
+        [itemSearchValueKeys]="countrySearchValueKeys" [multiple]="false" (selectionChange)="loadState()" [isClearSelection]="false">
+      </select-search>
+    </mat-grid-list>
+    <mat-grid-list cols="1"  rowHeight="50px">
+      <select-search 
+        formControlName="state" [data]="states" placeholderLabel="Select State *" itemViewValueKey="stateName" 
+        [itemSearchValueKeys]="stateSearchValueKeys" [multiple]="false" (selectionChange)="loadCity()" [isClearSelection]="false">
+      </select-search>
+    </mat-grid-list>
+    <mat-grid-list cols="1"  rowHeight="50px">
+      <select-search 
+        formControlName="city" [data]="cities" placeholderLabel="Select City *" itemViewValueKey="cityName" 
+        [itemSearchValueKeys]="citySearchValueKeys" [multiple]="false" [isClearSelection]="false">
+      </select-search>
+    </mat-grid-list>
+
+    <!-- Mobile , Email-->
+   <mat-grid-list cols="1" rowHeight="50px">
+      <mat-grid-tile colspan="1" class="left">
+        <mat-form-field>
+          <input matInput formControlName="mobile" type="text" placeholder="Mobile Number  * - ( 10 Digits)" maxlength="10" 
+          >  <!--(keyup)="checkMobileLength($event)"-->
+        </mat-form-field>	
+      </mat-grid-tile>	
+    </mat-grid-list>
+    <mat-grid-list cols="1" rowHeight="50px">
+        <mat-grid-tile colspan="1" class="left">
+          <mat-form-field>
+            <input matInput formControlName="emailId" type="email" placeholder="Email ID " > <!--(blur)="checkEmail($event);" (keyup)="errorDisableSaveButton($event);"-->
+          </mat-form-field>		
+        </mat-grid-tile>
+      </mat-grid-list>
+    </section>  
+    
+    <!-- 2nd Section Starts -->
+    <section>
+        <!-- GST-IN Type -->
+      <mat-grid-list cols="1"  rowHeight="50px">
+          <select-search 
+            formControlName="gstnType" [data]="gstnTypes" placeholderLabel="Select GSTIN Type*" itemViewValueKey="value" 
+            [itemSearchValueKeys]="gstnSearchValueKeys" [multiple]="false" [isClearSelection]="false">
+          </select-search>	
+      </mat-grid-list>
+    <!-- PAN  Mandatory -->
+      <mat-grid-list cols="1" rowHeight="50px" *ngIf="showPan">	
+        <mat-grid-tile colspan="1" class="left">
+          <mat-form-field>
+            <input matInput formControlName="panNumber" type="text" placeholder="PAN Number * - ( 10 Alphamumeric)" 
+            (keyup)="checkPanNo($event)" maxlength="10">
+          </mat-form-field>	
+        </mat-grid-tile>		
+      </mat-grid-list>
+
+       <!-- PAN  Not Mandatory -->
+       <mat-grid-list cols="1" rowHeight="50px" *ngIf="showPanNotMan">	
+        <mat-grid-tile colspan="1" class="left">
+          <mat-form-field>
+            <input matInput formControlName="panNumberNotMan" type="text" placeholder="PAN Number - ( 10 Alphamumeric)" 
+            (keyup)="checkPanNo($event)" maxlength="10">
+          </mat-form-field>	
+        </mat-grid-tile>		
+      </mat-grid-list>
+ 
+     <!-- GST-IN Number Mandatory-->
+     <mat-grid-list cols="1" rowHeight="50px" *ngIf="showGstNo">
+        <mat-grid-tile colspan="1" class="left">
+          <mat-form-field>
+            <input matInput id="gstNumberMand" formControlName="gstnNumber"  type="text" placeholder="GSTIN Number * - ( 15 Alphamumeric)" (keyup)="checkGstinNo($event)" maxlength="15">
+          </mat-form-field>	
+        </mat-grid-tile>
+      </mat-grid-list>
+
+       <!-- GST-IN Number Not Mandatory -->
+     <mat-grid-list cols="1" rowHeight="50px" *ngIf="showGSTNNotMan">
+      <mat-grid-tile colspan="1" class="left">
+        <mat-form-field>
+          <input matInput id="gstNumberNotMand" formControlName="gstnNumberNotMan" type="text" placeholder="GSTIN Number - (15 Alphamumeric)" (keyup)="checkGstinNo($event)" maxlength="15">
+        </mat-form-field>	
+      </mat-grid-tile>
+    </mat-grid-list>
+
+      <!-- GL-Name, SL Name -->
+      <mat-grid-list cols="1" rowHeight="50px;">
+					<select-search formControlName="glName" [data]="glNames" 
+		                        placeholderLabel="Select GL Name *" 
+		                        itemViewValueKey="glDisplayName"
+		                        [itemSearchValueKeys]="glSearchValueKeys"
+		                        [multiple]="false" 
+                            [isClearSelection]="false">
+              </select-search>
+				</mat-grid-list>
+    </section>
+     
+</form>	
+<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer class="center">
+ <mat-grid-list cols="1" rowHeight="40px">
+     <mat-grid-tile colspan="1">
+         <button mat-raised-button class="full-width" color="primary" (click)="saveCustomer();" 
+         [disabled]="!createCustomerForm.valid || isGstinNotValid">SAVE</button>
+     </mat-grid-tile>
+ </mat-grid-list>
+</ion-footer>

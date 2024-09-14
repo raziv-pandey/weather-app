@@ -1,0 +1,74 @@
+<ion-header>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row class="header-row">
+            <div class="title center"> Collection Details Report </div>
+            <button mat-icon-button class="align-right" (click)="dismissRegisterModal();">
+                <i class="icon icon-cancel"></i>
+            </button>
+        </mat-toolbar-row>
+        <mat-toolbar-row class="sub-header-row">
+            <mat-grid-list cols="12" rowHeight="20px">
+                <mat-grid-tile colspan="5" class="left">
+                    Total Recvd. Amt. : 
+                </mat-grid-tile>
+                <mat-grid-tile colspan="7" class="right">
+                    <b>{{totalRecieved | number : '1.2-2'}}</b> 
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</ion-header>
+<ion-content padding>
+
+    <div id="result" *ngIf="collectionDetails$">
+        <div *ngFor="let collectiondetail of collectionDetails$" class="altRow" >
+            <mat-grid-list cols="12" rowHeight="35px">
+                <mat-grid-tile class="left" colspan="6">
+                    Inv. No. : {{collectiondetail.invoiceNo}}
+                </mat-grid-tile>
+                <mat-grid-tile class="right" colspan="6">
+                    Bill Dt. : {{collectiondetail.pdcChequeDate | date:'dd/MM/yyyy'}}
+                </mat-grid-tile>
+            </mat-grid-list>               
+            <mat-grid-list cols="12" rowHeight="35px">
+                 <mat-grid-tile class="left" colspan="6">
+                    Location : {{collectiondetail.locationDisplayName}} ({{collectiondetail.locationCode}})
+                </mat-grid-tile>
+                <mat-grid-tile class="right" colspan="6">
+                    Chq. No. : {{collectiondetail.pdcChequeNo}}
+                </mat-grid-tile>
+            </mat-grid-list>
+
+            <mat-grid-list cols="12" rowHeight="35px">
+                <mat-grid-tile class="left" colspan="6">
+                    Pay Mode : {{collectiondetail.collPayMode}}
+                </mat-grid-tile>
+                <mat-grid-tile class="right" colspan="6">
+                    Inv. Amt.: {{collectiondetail.receiveAmt | number : '1.2-2'}}
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </div>
+</ion-content>
+<ion-footer class="center">
+    <div id="result">
+        <!-- <mat-grid-list cols="2" rowHeight="40px">
+            <mat-grid-tile class="left" colspan="1">
+                Unadjusted Amt. : <span class="primary-dark-color">{{diffrencetotalRecieved | number : '1.2-2'}}</span>
+            </mat-grid-tile>
+            <mat-grid-tile class="right" colspan="1">
+                Total Inv. Amt. : {{totalInvoiceCollection | number : '1.2-2'}}
+            </mat-grid-tile>
+        </mat-grid-list> -->
+        <mat-grid-list cols="1" rowHeight="25px">
+            <mat-grid-tile class="left" colspan="1">
+                Unadjusted Amt. : <span class="orange">{{diffrencetotalRecieved | number : '1.2-2'}}</span>
+            </mat-grid-tile>
+        </mat-grid-list>  
+        <mat-grid-list cols="1" rowHeight="25px">
+            <mat-grid-tile class="left" colspan="1">
+                Total Inv. Amt. : <span class="primary-dark-color">{{totalInvoiceCollection | number : '1.2-2'}}</span>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</ion-footer>

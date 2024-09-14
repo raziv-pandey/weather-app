@@ -1,0 +1,67 @@
+page-customer-collection-detail {
+    .outstanding-wrapper,
+    .credit-limit-wrapper{
+        .mat-list-item {
+            height: 25px;
+        }
+    }
+    .credit-limit-wrapper {
+        box-shadow: inset 5px 0px 10px -5px $grey;
+        .mat-list-item {
+            &:first-child { color: $grey; }
+            &:nth-child(2) {
+                color: $primaryDark;
+                .mat-list-item-content { font-size: 1.2rem!important; }
+            }
+            &:nth-child(5) {
+                color: $approve;
+            }
+        }
+    }
+    .due-wrapper {
+        //background-color: $alternateColor;
+        &.mat-grid-tile { box-shadow: 2px 5px 10px -5px $grey; }
+        .mat-list-item {
+            height: 16px;
+        }
+    }
+    .outstanding-wrapper {
+        .mat-list-item {
+            &:first-child { color: $grey; }
+            &:last-child {
+                color: $black;
+                .mat-list-item-content { font-size: 1.2rem!important; }
+            }
+        }
+        .icon-arrow-right { top: calc(50% - 8px)!important; }
+    }
+    .overDue,
+    .noDue,
+    .advanced {
+        position: absolute;
+        right: 5px;
+        top: 0;
+    }
+    .overDue { color: $red; }
+    .noDue { color: $primaryDark; }
+    .advanced { color: $confirm; }
+    .mobile,
+    .email {
+        .icon {
+            position: relative;
+            top: 1.5px;
+        }
+    }
+    .customer-contact-details {
+        position: relative;
+        z-index: -1;
+    }
+    .whatsaap-sahre-button {
+        text-decoration: none;
+        margin-left: 10px;
+        color: $approve;
+        .icon {
+            font-size: 1.4rem!important;
+        }
+    }
+}

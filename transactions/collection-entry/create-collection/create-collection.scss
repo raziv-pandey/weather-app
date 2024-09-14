@@ -1,0 +1,16 @@
+page-create-collection {
+	 .mat-figure {
+        padding: 0 3px!important;
+        font-size: 0.8rem;
+    }
+    .altRow .mat-grid-tile.left {
+        color: $primaryDark;
+        .icon {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+    }
+    .search-wrapper {
+        margin: 5px 15px;
+    }
+}

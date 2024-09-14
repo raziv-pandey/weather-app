@@ -1,0 +1,15 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center">
+			Collection Entry
+		</div>
+		<notification-icon></notification-icon>
+	</mat-toolbar>
+</ion-header>
+<ion-content>
+	<transaction-program [showPrograms]="showPrograms" (goToProgram)="goToProgram($event)"></transaction-program>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>

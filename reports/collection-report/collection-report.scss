@@ -1,0 +1,29 @@
+page-collection-report {
+	mat-expansion-panel-header{
+		background: #eef8ff;
+	}
+	.content { background-color: #F4F7FE; }
+    #showBorder{
+        border:1px solid #CCC; 
+        border-radius:8px;
+        height:54px;
+        color:#075195;
+        font-weight:bold;
+        font-size:0.9rem !important;
+        background-color: #efeded;
+    }
+    form{
+        padding: 8px 3px 0 0;
+    }
+    .customButton{
+        box-shadow:1px 6px 0px #ccc !important; 
+        margin:0 3px !important;
+        min-width: 81px !important;
+    }
+    .mat-expansion-panel{
+        margin-bottom: 6px !important;
+    }
+    .mat-radio-label-content{
+        margin-left: -4px !important;
+    }
+}

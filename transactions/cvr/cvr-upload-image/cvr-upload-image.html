@@ -1,0 +1,27 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="goToBack();">
+			<i class="icon icon-cancel"></i>
+		</button>
+		<div class="title center"> File Upload </div>
+		
+		<!-- <button mat-icon-button color="primary" (click)="addFile();" *ngIf="!isPendingApproval">
+			<i class="icon icon-add"></i>
+		</button> -->
+	</mat-toolbar>
+</ion-header>
+
+
+<ion-content>
+	<document *ngFor="let file of files; let i = index"
+		[file]="file.baseImg"
+		[fileName]="file.fileName"
+		[fileSrNo]="file.fileSrNo"
+		[customerCode]="customerCode"
+		[index]="i"
+		(deleteUploadedFile)="deleteUploadedFile($event);"
+		[canDelete] = "true" 
+	>
+	</document>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>

@@ -1,0 +1,79 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center">
+			<span>{{customerDetails.customerDisplayname}}</span>
+			<!-- <span class="sub-title">{{customerDetails.customerCode}}</span> -->
+			<span>({{customerDetails.customerCode}})</span>
+		</div>
+		<button mat-icon-button class="align-right" (click)="goToHome();">
+			<i class="icon icon-home"></i>
+		</button>
+	</mat-toolbar>
+</ion-header>
+<ion-content>
+	<mat-grid-list cols="7" rowHeight="55px">
+		<mat-grid-tile [colspan]="4" [rowspan]="1" class="outstanding-wrapper" (click)="showCustomerOutstanding();">
+			<mat-list>
+				<mat-list-item> Total Outstanding </mat-list-item>
+				<mat-list-item>
+					{{(customerDetails.overDueamount + customerDetails.notDueamount + customerDetails.openAdvamt) | number:'1.2-2'}}
+					<i class="icon icon-arrow-right"></i>
+				</mat-list-item>
+			</mat-list>
+		</mat-grid-tile>
+		<mat-grid-tile [colspan]="3" [rowspan]="2" class="credit-limit-wrapper">
+			<mat-list>
+				<mat-list-item class="center due-wrapper"> Available Credit Limit </mat-list-item>
+				<mat-list-item class="center due-wrapper"> {{(customerDetails.maxCreditlimit - (customerDetails.overDueamount + customerDetails.notDueamount + customerDetails.openAdvamt)) | number:'1.2-2'}} </mat-list-item>
+				<mat-divider></mat-divider>
+				<mat-list-item class="center due-wrapper"> Maximum Credit Limit </mat-list-item>
+				<mat-list-item class="center due-wrapper"> {{customerDetails.maxCreditlimit | number:'1.2-2'}} </mat-list-item>
+				<!-- {{(customerDetails.maxCreditlimit - (customerDetails.overDueamount + customerDetails.notDueamount + customerDetails.openAdvamt)) | number:'1.2-2'}} -->
+			</mat-list>
+		</mat-grid-tile>
+		<mat-grid-tile [colspan]="4" [rowspan]="1" class="due-wrapper">
+			<mat-list>
+				<mat-list-item> Over Due : <span class="overDue">&nbsp;{{customerDetails.overDueamount | number:'1.2-2'}}</span> </mat-list-item>
+				<mat-list-item> Not Due : <span class="noDue">&nbsp;{{customerDetails.notDueamount | number:'1.2-2'}}</span> </mat-list-item>
+				<mat-list-item> Advance : <span class="advanced">&nbsp;{{customerDetails.openAdvamt | number:'1.2-2'}}</span> </mat-list-item>
+			</mat-list>
+		</mat-grid-tile>
+	</mat-grid-list>
+	<mat-divider></mat-divider>
+	<div *ngIf="customerAdress" class="customer-contact-details">
+		<mat-card *ngIf="customerAdress.contactDtls">
+			<mat-card-header class="center">
+				<mat-card-title>Mobile Number</mat-card-title>
+			</mat-card-header>
+			<mat-card-content class="center mobile">
+				<i class="icon icon-contact"></i>&nbsp;<a href="tel:{{customerAdress.contactDtls}}">{{customerAdress.contactDtls}}</a>
+				<!-- <a class="whatsaap-sahre-button" href="https://api.whatsapp.com/send?phone={{customerAdress.contactDtls}}&text=Total Outstanding : {{(customerDetails.overDueamount + customerDetails.notDueamount + customerDetails.openAdvamt) | number:'1.2-2'}} Over Due : {{customerDetails.overDueamount | number:'1.2-2'}} Not Due : {{customerDetails.notDueamount | number:'1.2-2'}} Advance : {{customerDetails.openAdvamt | number:'1.2-2'}}"> -->
+				<button mat-icon-button (click)="shareVaiWhatsApp();" class="whatsaap-sahre-button">
+					<i class="icon icon-whatsapp"></i>
+				</button>	
+			</mat-card-content>
+		</mat-card>
+		<mat-card *ngIf="customerAdress.emailId">
+			<mat-card-header class="center">
+				<mat-card-title>Email ID</mat-card-title>
+			</mat-card-header>
+			<mat-card-content class="center email">
+				<i class="icon icon-message-box"></i>&nbsp;<a href="mailto:{{customerAdress.emailId}}">{{customerAdress.emailId}}</a>	
+			</mat-card-content>
+		</mat-card>
+		<mat-card *ngIf="customerAdress.customerBilladdress">
+			<mat-card-content class="center"> {{customerAdress.customerBilladdress | titlecase}} </mat-card-content>
+		</mat-card>
+	</div>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer class="center">
+	<mat-grid-list cols="1" rowHeight="40px">
+		<mat-grid-tile>
+			<button mat-raised-button class="full-width" color="primary" (click)="showCustomerOutstanding();">ADVANCE / INVOICE WISE COLLECTION</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-footer>

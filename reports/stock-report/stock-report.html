@@ -1,0 +1,188 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button appBackButton (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center"> Stock Report </div>
+		<button mat-icon-button class="align-right" (click)="goToHome();">
+			<i class="icon icon-home"></i>
+		</button>
+	</mat-toolbar>
+</ion-header>
+<ion-content padding>
+	<form [formGroup]="stockReportForm">
+		<mat-expansion-panel [expanded]="isExpanded" (opened)="isExpanded = true" (closed)="isExpanded = false">
+			<mat-expansion-panel-header>
+				<mat-panel-title *ngIf="isExpanded"> Collapse </mat-panel-title>
+				<mat-panel-title *ngIf="!isExpanded"> Expand </mat-panel-title>
+			</mat-expansion-panel-header>
+			<mat-grid-list cols="1">
+				<select-search formControlName="location" [data]="locations" placeholderLabel="Select Location" itemViewValueKey="value"
+				 [itemSearchValueKeys]="locationSearchValueKeys" [multiple]="true" [isIcon]="true" (itemSelected)="locationChanged($event)"
+				 iconName="location" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+
+			<!-- ---------------------Group Code----------------------- -->
+			<mat-grid-list cols="1">
+				<select-search formControlName="stockGroupCode" [data]="stockGroupCodes" placeholderLabel="Select Group Code *" itemViewValueKey="groupDisplayName"
+				 [itemSearchValueKeys]="groupCodeSearchValueKeys" [multiple]="false" [isIcon]="true" (selectionChange)="loadSubGroupCodes($event)"
+				 iconName="pending_trx" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+
+			<!-- ---------------------Sub Group Code----------------------- -->
+			<mat-grid-list cols="1">
+				<select-search formControlName="stockSubGroupCode" [data]="stockSubGroupCodes" placeholderLabel="Select Sub Group Code" itemViewValueKey="groupDisplayName"
+				 [itemSearchValueKeys]="subGroupCodeSearchValueKeys" [multiple]="false" [isIcon]="true" (selectionChange)="loadSubSubGroupCodes($event)"
+				 iconName="pending_trx" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+
+			<!-- ---------------------Sub Sub Group Code----------------------- -->
+			<mat-grid-list cols="1">
+				<select-search formControlName="stockSubSubGroupCode" [data]="stockSubSubGroupCodes" placeholderLabel="Select Sub Sub Group Code"
+				 itemViewValueKey="groupDisplayName" [itemSearchValueKeys]="subSubGroupCodeSearchValueKeys" [multiple]="false" [isIcon]="true"
+				 iconName="pending_trx" (selectionChange)="loadSubSubGroupItems($event)" [isClearSelection]="false">
+					<!-- (selectionChange)="loadSubSubGroupItems($event)" -->
+				</select-search>
+			</mat-grid-list>
+			<mat-grid-list cols="1">
+				<ionic-selectable #itemContent itemValueField="itemCode" itemTextField="displayName" formControlName="product" [items]="products"
+				 [canSearch]="true" [isMultiple]="true" [hasInfiniteScroll]="true" (onInfiniteScroll)="getMoreProducts($event)" placeholder="Select Item *"
+				 (onSearch)="searchProducts($event)" (onClose)="onClose($event)">
+				</ionic-selectable>
+			</mat-grid-list>
+			<mat-divider></mat-divider>
+			<mat-radio-group formControlName="viewStock">
+				<mat-grid-list cols="2" rowHeight="30px">
+					<mat-grid-tile class="left">
+						<mat-radio-button value="I">Item Wise</mat-radio-button>
+					</mat-grid-tile>
+					<mat-grid-tile class="right">
+						<mat-radio-button value="B">Batch Wise</mat-radio-button>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-radio-group>
+		</mat-expansion-panel>
+	</form>
+
+	<div>
+		<div id="result" *ngIf="!showStockReportData">
+			<div *ngIf="viewStockFlag == 'I'">
+				<div class="altRow" *ngFor="let data of resultData">
+					<mat-grid-list cols="1" rowHeight="40px">
+						<mat-grid-tile colspan="1" class="left">
+							Item Name : &nbsp;
+							<b>{{data.itemDisplayName}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<mat-grid-list cols="1" rowHeight="40px">
+						<mat-grid-tile colspan="1" class="left">
+							Item Code : &nbsp;
+							<b>{{data.itemCode}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-divider></mat-divider>
+
+					<div *ngFor="let location of data.locations">
+						<mat-grid-list cols="1" rowHeight="30px">
+							<mat-grid-tile colspan="1" class="left">
+								Location : &nbsp;
+								<b class="primary-dark-color">{{location}}</b>
+							</mat-grid-tile>
+						</mat-grid-list>
+						<mat-divider></mat-divider>
+						<mat-grid-list cols="12" rowHeight="30px">
+							<mat-grid-tile colspan="4" class="left">
+								Bal. Stock
+							</mat-grid-tile>
+							<mat-grid-tile colspan="4" class="center">
+								Res. Stock
+							</mat-grid-tile>
+							<mat-grid-tile colspan="4" class="right">
+								Free Stock
+							</mat-grid-tile>
+						</mat-grid-list>
+
+						<mat-grid-list cols="12" rowHeight="30px">
+							<mat-grid-tile colspan="4" class="left">
+								<b class="orange">{{data.stock[location].groundStock |number:'1.3-3'}}</b>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="4" class="center">
+								<b class="blue">{{data.stock[location].reserveStock |number:'1.3-3'}}</b>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="4" class="right">
+								<b class="green">{{data.stock[location].freeStock|number:'1.3-3'}}</b>
+							</mat-grid-tile>
+						</mat-grid-list>
+						<mat-divider></mat-divider>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="viewStockFlag == 'B'">
+				<div class="altRow" *ngFor="let data of resultData">
+					<mat-grid-list cols="1" rowHeight="40px">
+						<mat-grid-tile colspan="1" class="left">
+							Item Name : &nbsp;
+							<b>{{data.itemDisplayName}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<mat-grid-list cols="1" rowHeight="40px">
+						<mat-grid-tile colspan="1" class="left">
+							Item Code : &nbsp;
+							<b>{{data.itemCode}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-grid-list cols="1" rowHeight="50px">
+						<mat-grid-tile colspan="1" class="left">
+							Batch No : &nbsp;
+							<b>{{data.batchNo}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-divider></mat-divider>
+
+					<!-- <div *ngFor="let location of data.locations"> -->
+					<mat-grid-list cols="1" rowHeight="30px">
+						<mat-grid-tile colspan="1" class="left">
+							Location : &nbsp;
+							<b class="primary-dark-color">{{data.locationDisplayName}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-divider></mat-divider>
+					<mat-grid-list cols="12" rowHeight="30px">
+						<mat-grid-tile colspan="4" class="left">
+							Bal. Stock
+						</mat-grid-tile>
+						<mat-grid-tile colspan="4" class="center">
+							Res. Stock
+						</mat-grid-tile>
+						<mat-grid-tile colspan="4" class="right">
+							Free Stock
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<mat-grid-list cols="12" rowHeight="30px">
+						<mat-grid-tile colspan="4" class="left">
+							<b class="orange">&nbsp; {{data.groundStock | number:'1.3-3'}}</b>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="4" class="center">
+							<b class="blue">&nbsp; {{data.reserveStock |number:'1.3-3'}}</b>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="4" class="right">
+							<b class="green">&nbsp; {{data.freeStock | number:'1.3-3'}}</b>
+						</mat-grid-tile>
+					</mat-grid-list>
+					<mat-divider></mat-divider>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer class="center">
+	<button mat-raised-button class="full-width" color="primary" (click)="showStockReport();" [disabled]="isShowBtnDisabled || !stockReportForm.valid">SHOW</button>
+</ion-footer>

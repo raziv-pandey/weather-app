@@ -1,0 +1,95 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<mat-toolbar-row class="header-row" *ngIf="!showSearch">
+			<button mat-icon-button (click)="gotoBack();">
+				<i class="icon icon-arrow-left"></i>
+			</button>
+			<div class="title center"> Customer Outstanding </div>
+			<button mat-icon-button class="align-right" (click)="toggleInvoiceSearch();" [disabled]="invoices.length==0">
+				<i class="icon icon-search"></i>
+			</button>
+		</mat-toolbar-row>
+		<mat-toolbar-row class="header-row" *ngIf="showSearch">
+			<button mat-icon-button (click)="toggleInvoiceSearch();">
+					<i class="icon icon-arrow-left"></i>
+				  </button>
+			  <mat-form-field class="input-with-icon" class="search_box">
+				<input matInput type="text" [(ngModel)]="search" id="searchInvoice">
+			  </mat-form-field>
+	</mat-toolbar-row>
+		<mat-toolbar-row class="sub-header-row customer-name center" *ngIf="customerDetails"> {{customerDetails.customerDisplayname}} </mat-toolbar-row>
+		<mat-toolbar-row class="sub-header-row credit-limit center" *ngIf="customerDetails"> Available Credit Limit : {{(customerDetails.maxCreditlimit - (customerDetails.overDueamount + customerDetails.notDueamount
+			+ customerDetails.openAdvamt)) | number : '1.2-2'}} </mat-toolbar-row>
+		<mat-toolbar-row class="sub-header-row outstanding-amount center" *ngIf="customerDetails"> {{(customerDetails.overDueamount + customerDetails.notDueamount + customerDetails.openAdvamt) | number : '1.2-2'}} </mat-toolbar-row>
+		<mat-toolbar-row class="sub-header-row outstanding-text center" *ngIf="customerDetails"> Total Outstanding </mat-toolbar-row>
+	</mat-toolbar>
+</ion-header>
+<ion-content >
+	<form [formGroup]="customerOutstandingForm">
+		<mat-grid-list cols="12" rowHeight="60.5px">
+			<select-search formControlName="location" [data]="locations" 
+			placeholderLabel="Select Location *" 
+			itemViewValueKey="value"
+			[itemSearchValueKeys]="locationSearchValueKeys"
+			[multiple]="false"
+			(selectionChange)="loadInvoiceList($event.value);"
+			[isIcon]="true"
+			iconName="location"
+			[isClearSelection]="false">
+			</select-search>
+		</mat-grid-list>
+
+	<mat-selection-list #invoiceList  [disabled]="!customerOutstandingForm.valid">
+		<mat-list-option class="altRow" *ngFor="let invoice of invoices |filter : search" [checkboxPosition]="before" [disableRipple]="true"
+		 (selectionChange)="handleCheck($event.selected, invoice);">
+		    <mat-grid-list cols="12" rowHeight="30px">
+				<mat-grid-tile colspan="7" class="left"> Inv. No. :  {{invoice.refInvNo}} </mat-grid-tile>
+				<mat-grid-tile colspan="5" class="left"> &nbsp; </mat-grid-tile>
+			</mat-grid-list>
+			<mat-grid-list cols="12" rowHeight="30px">
+				<mat-grid-tile colspan="5" class="left"> Inv. Dt. : {{invoice.refInvDt | date:'dd/MM/yyyy'}} </mat-grid-tile>
+				<mat-grid-tile colspan="7" class="right"> Inv. Amt. :  {{invoice.fcNetAmt | number : '1.2-2'}} </mat-grid-tile>
+			</mat-grid-list>
+			<mat-grid-list cols="12" rowHeight="30px">
+				<mat-grid-tile colspan="5" class="left"> Due Dt. : {{invoice.dueDt | date:'dd/MM/yyyy'}} </mat-grid-tile>
+				<mat-grid-tile colspan="7" class="right"> Bal. Amt. :  {{invoice.balToAdjFcAmt | number : '1.2-2'}} </mat-grid-tile>
+			</mat-grid-list>
+			<mat-grid-list cols="12" rowHeight="30px">
+				<mat-grid-tile colspan="7" class="left"> Location : {{invoice.locationDisplayName}} ({{invoice.locationCode}}) </mat-grid-tile>
+				<mat-grid-tile colspan="5" class="right"> Age : {{invoice.ageInDays}} </mat-grid-tile>
+			</mat-grid-list>
+		</mat-list-option>
+	</mat-selection-list>
+	
+	<!-- <mat-divider></mat-divider> -->
+</form>	
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer>
+	<!--Total Balance Amount-->
+		<mat-grid-list cols="12" rowHeight="20px" class="fasAccountPayable " style="background-color: #FFFFFF">
+				<mat-grid-tile colspan="6" class="left">
+					<b class="primary-dark-color"> Total Invoice Amount : </b>
+				</mat-grid-tile>
+				<mat-grid-tile colspan="6" class="right value">
+					<b class="primary-dark-color">{{totalInvAmount | number : '1.2-2'}}</b>
+				</mat-grid-tile>
+			</mat-grid-list>
+
+	<mat-grid-list cols="5" rowHeight="20px"  *ngIf="selectedInvoices.length != 0">
+		<mat-grid-tile colspan="4" class="left"> Total Bal. Amt.:
+			<span class="primary-color-dark">&nbsp;{{totalBillAmount | number : '1.2-2'}}</span>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="1" rowspan="2">
+			<button mat-raised-button color="primary" (click)="collectAmount()" [disabled]="selectedInvoices.length <= 0 || !customerOutstandingForm.valid"> RECEIVE </button>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="4" class="left"> Total Bill Count :
+			<span class="primary-color-dark">&nbsp;{{invoiceList.selectedOptions.selected.length}}</span>
+		</mat-grid-tile>
+	</mat-grid-list>
+	<mat-grid-list cols="1" rowHeight="40px" *ngIf="selectedInvoices.length  <= 0">
+		<mat-grid-tile>
+			<button mat-raised-button class="full-width" color="primary" (click)="partialCollection();" [disabled]="!customerOutstandingForm.valid">ADVANCE COLLECTION</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-footer>

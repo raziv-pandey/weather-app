@@ -1,0 +1,50 @@
+<ion-header>
+	<mat-toolbar color="primary" *ngIf="!showSearch">
+		<button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center">
+			Create Collection
+		</div>
+		<button mat-icon-button class="align-right" (click)="toggleCustomerSearch();" [disabled]="customers.length==0">
+			<i class="icon icon-search"></i>
+		</button>
+	</mat-toolbar>
+	<mat-toolbar color="primary" *ngIf="showSearch">
+		<button mat-icon-button (click)="toggleCustomerSearch();">
+			<i class="icon icon-arrow-left"></i>
+		  </button>
+	  <mat-form-field class="input-with-icon" class="search_box">
+		<input matInput type="text" id="searchCollection" (keyup)="searchCustomers($event)">
+	  </mat-form-field>
+	</mat-toolbar>
+</ion-header>
+<ion-content>
+	<!-- <mat-grid-list cols="1" *ngIf="showSearch" rowHeight="40px" class="search-wrapper sticky-header">
+		<mat-grid-tile>
+			<mat-form-field class="input-with-icon">
+				<i class="icon icon-search"></i>
+				<input matInput type="text" [(ngModel)]="search" id="searchCollection" (keyup)="searchCustomer($event)">
+			</mat-form-field>
+		</mat-grid-tile>
+	</mat-grid-list> -->
+	<mat-grid-list cols="12" rowHeight="40px" class="title-row sticky-header">
+		<mat-grid-tile colspan="7" class="left"> Customer Name </mat-grid-tile>
+		<mat-grid-tile colspan="4" class="right"> Over Due </mat-grid-tile>
+		<mat-grid-tile colspan="1" class="right"> &nbsp;</mat-grid-tile>
+	</mat-grid-list>
+	<mat-grid-list class="altRow" cols="12" *ngFor="let cust of customers" rowHeight="40px" (click)="showDetails(cust);">
+		<mat-grid-tile colspan="7" class="left">
+			{{cust.customerDisplayname | titlecase}} ({{cust.customerCode}})
+		</mat-grid-tile>
+		<mat-grid-tile colspan="4" class="right due"> {{cust.overDueamount | number:'1.2-2'}} </mat-grid-tile>
+		<mat-grid-tile colspan="1" class="right primary-dark-color">
+			<i class="icon icon-arrow-right"></i>
+		</mat-grid-tile>
+	</mat-grid-list>
+	<ion-infinite-scroll (ionInfinite)="loadMoreCustomers($event)">
+		<ion-infinite-scroll-content>
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>

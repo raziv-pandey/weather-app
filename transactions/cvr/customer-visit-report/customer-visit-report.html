@@ -1,0 +1,182 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="goToBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center"> Customer Visit Report</div>
+		<button mat-icon-button color="primary" (click)="openPopupImageFile();" [disabled]="!isUploadImage">
+			<i class="icon icon-camera"></i>
+		</button>
+	</mat-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+	<mat-grid-list cols="1" rowHeight="30px" class="greyBg">
+		<mat-grid-tile colspan="1" class="left">
+			Location :
+			<span class="primary-dark-color">&nbsp;{{locationName}} </span>
+		</mat-grid-tile>
+	</mat-grid-list>
+	<mat-grid-list cols="1" rowHeight="30px" class="greyBg">
+		<mat-grid-tile colspan="1" class="left">
+			E-Code :
+			<span class="primary-dark-color">&nbsp;{{ecodeName }} </span>
+		</mat-grid-tile>
+	</mat-grid-list>
+
+	<form [formGroup]="customerVisitReportForm" class="woDetailsForm">
+		<section class="productionDetails">
+			<!--Customer-->
+			<mat-grid-list cols="1" class="select-customer" rowHeight="55.5px">
+				<select-search formControlName="customer" [data]="customers" placeholderLabel="Select Customer *"
+					itemViewValueKey="value" [itemSearchValueKeys]="customerSearchValueKeys" [multiple]="false"
+					[isIcon]="true" iconName="user" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+			<!--Purpose of Visit-->
+			<mat-grid-list cols="1" rowHeight="55.5px">
+				<mat-form-field class="input-with-button input-with-icon">
+					<i class="icon icon-pending_trx"></i>
+					<input matInput type=text placeholder="Purpose of Visit *" value="" formControlName="pov"
+						[class.invalid]="!customerVisitReportForm.controls.pov.valid && (customerVisitReportForm.controls.pov.dirty || submitAttempt)">
+					<button type="button" class="cvr-button" mat-icon-button (click)="openPreviousPOV()">
+						<strong>POV</strong>
+					</button>
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Person Meet Incoming-->
+			<mat-grid-list cols="1" class="select-pm" rowHeight="55.5px" *ngIf="ecodeCode=='2651'">
+				<select-search formControlName="pm" [data]="pms" placeholderLabel="Select Person Meet *"
+					itemViewValueKey="employeeFullName" [itemSearchValueKeys]="pmSearchValueKeys" [multiple]="false"
+					[isIcon]="true" iconName="user" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+			<!--CVR Details-->
+			<mat-grid-list cols="1" rowHeight="55.5px">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-license-document"></i>
+					<input matInput type=text placeholder="CVR Details *" value="" formControlName="cvrd"
+						[class.invalid]="!customerVisitReportForm.controls.cvrd.valid && (customerVisitReportForm.controls.cvrd.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--CVR Date-->
+			<mat-grid-list cols="1" rowHeight="55.5px">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-calendar"></i>
+					<input matInput [readonly]="true" (click)="cvrDate.open();" displayFormat="DD-MM-YY"
+						formControlName="cvrDate" [matDatepicker]="cvrDate" [max]="maxCvrDate" [min]="minDate"
+						placeholder="CVR Date *"
+						[class.invalid]="!customerVisitReportForm.controls.cvrDate.valid && (customerVisitReportForm.controls.cvrDate.dirty || submitAttempt)"
+						readonly>
+					<mat-datepicker-toggle matSuffix [for]="cvrDate"></mat-datepicker-toggle>
+					<mat-datepicker #cvrDate></mat-datepicker>
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Actual Visit Date Incoming-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2651'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-calendar"></i>
+					<input matInput [readonly]="true" (click)="actualVisitDate.open();" displayFormat="DD-MM-YY"
+						formControlName="actualVisitDate" [matDatepicker]="actualVisitDate" [max]="maxDate"
+						[min]="minDate" placeholder="Actual Visit Date"
+						[class.invalid]="!customerVisitReportForm.controls.actualVisitDate.valid && (customerVisitReportForm.controls.actualVisitDate.dirty || submitAttempt)"
+						readonly>
+					<mat-datepicker-toggle matSuffix [for]="actualVisitDate"></mat-datepicker-toggle>
+					<mat-datepicker #actualVisitDate></mat-datepicker>
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Actual Visit Start Date Incoming-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2651'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-HRMS"></i>
+					<input matInput type="datetime-local" id="avsd" name="avsd" formControlName="avsd"
+						placeholder="Actual Visit Start Date">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Actual Visit End Date Incoming-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2651'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-HRMS"></i>
+					<input matInput type="datetime-local" id="aved" name="aved" formControlName="aved"
+						placeholder="Actual Visit End Date">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Contact Person Outgoing-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2652'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-user"></i>
+					<input matInput type=text placeholder="Contact Person" value="" formControlName="cp"
+						[class.invalid]="!customerVisitReportForm.controls.cp.valid && (customerVisitReportForm.controls.cp.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Designation of Contact Outgoing-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2652'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-pending_trx"></i>
+					<input matInput type=text placeholder="Designation of Contact" value="" formControlName="desoc"
+						[class.invalid]="!customerVisitReportForm.controls.desoc.valid && (customerVisitReportForm.controls.desoc.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Department of Contact Outgoing-->
+			<mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2652'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-pending_trx"></i>
+					<input matInput type=text placeholder="Departmnet of Contact" value="" formControlName="depoc"
+						[class.invalid]="!customerVisitReportForm.controls.depoc.valid && (customerVisitReportForm.controls.depoc.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list>
+			<!--Longitude Outgoing-->
+			<!-- <mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2652'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-pending_trx"></i>
+					<input matInput type=number placeholder="Longitude" value="" formControlName="cvrLongitude"
+						[class.invalid]="!customerVisitReportForm.controls.cvrLongitude.valid 
+						&& (customerVisitReportForm.controls.cvrLongitude.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list> -->
+			<!--Latitude Outgoing-->
+			<!-- <mat-grid-list cols="1" rowHeight="55.5px" *ngIf="ecodeCode=='2652'">
+				<mat-form-field class="input-with-icon">
+					<i class="icon icon-pending_trx"></i>
+					<input matInput type=number placeholder="Latitude" value="" formControlName="cvrLatitude"
+						[class.invalid]="!customerVisitReportForm.controls.cvrLatitude.valid 
+						&& (customerVisitReportForm.controls.cvrLatitude.dirty || submitAttempt)">
+				</mat-form-field>
+			</mat-grid-list> -->
+			<!--Actions-->
+			<mat-grid-list cols="12" rowHeight="40px">
+				<mat-grid-tile colspan="10" class="left">
+					<span class="primary-dark-color"><strong>Actions</strong></span>
+				</mat-grid-tile>
+				<mat-grid-tile colspan="2" class="center">
+					<button type="button" class="cvr-button" mat-icon-button (click)="openActionPage()" [disabled]="actionDetailsArray.length > 0">
+						<strong> + </strong>
+					</button>
+				</mat-grid-tile>
+			</mat-grid-list>
+		</section>
+		<!--Action Loop-->
+		<section id="action-section" *ngIf="actionDetailsArray">
+			<div *ngFor="let action of actionDetailsArray">
+				<mat-grid-list cols="12" rowHeight="25px">
+					<mat-grid-tile colspan="12" rowspan="2" class="left">
+						Resp. : {{action.actionP}}
+					</mat-grid-tile>
+					<mat-grid-tile colspan="12" rowspan="2" class="left">
+						Action: {{action.employee}}
+					</mat-grid-tile>
+				</mat-grid-list>
+				<mat-divider></mat-divider>
+			</div>
+		</section>
+	</form>
+</ion-content>
+<ion-footer>
+	<mat-grid-list cols="1" rowHeight="40px">
+		<mat-grid-tile colspan="1">
+			<button class="full-width full-height" mat-raised-button color="primary" (click)="confirmCvr();"
+				[disabled]="!customerVisitReportForm.valid || actionLists">SUBMIT</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-footer>

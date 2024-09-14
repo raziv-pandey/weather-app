@@ -1,0 +1,40 @@
+page-stock-report {
+    .orange { color: $confirm; }
+    .blue { color: $primaryDark; }
+    .green { color: $approve; }
+}
+
+.arrowRightRotate{
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+}
+ionic-selectable { 
+    width: 100% !important; 
+    max-width: 100% !important;
+}
+
+.arrowRightRotate{
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+}
+.item-icon {
+    &:before {
+        content: ' ';
+        height: 15px;
+        width: 15px;
+        border: 1px solid #000;
+        line-height: 15px;
+        position: absolute;
+        top: calc(50% - 7px);
+    }
+    &.ion-ios-checkmark-circle:before, 
+    &.ion-md-checkmark-circle:before {
+        content: '\2713';
+    } 
+}
+.bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+    
+    right: -14px!important;
+}

@@ -1,0 +1,35 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<mat-toolbar-row class="header-row" *ngIf="!showSearch">
+			<button mat-icon-button (click)="gotoBack();">
+				<i class="icon icon-cancel p-cancel"></i>
+			</button>
+			<div class="title center"> Select Purpose of Visit </div>
+			<button mat-icon-button class="align-right" (click)="toggleActionSearch();">
+				<i class="icon icon-search"></i>
+			</button>
+		</mat-toolbar-row>
+		<mat-toolbar-row class="header-row" *ngIf="showSearch">
+			<button mat-icon-button (click)="toggleActionSearch();">
+				<i class="icon icon-arrow-left"></i>
+			</button>
+			<mat-form-field class="input-with-icon" class="search_box">
+				<input matInput type="text" [(ngModel)]="search" id="searchAction">
+			</mat-form-field>
+		</mat-toolbar-row>
+	</mat-toolbar>
+</ion-header>
+<ion-content padding>
+	<mat-selection-list>
+		<mat-list-option class="altRow item-details-content" *ngFor="let ap of aps |filter : search"
+			(selectionChange)="selectAction($event.selected, ap);" [checkboxPosition]="before" [disableRipple]="true">
+			<mat-grid-list cols="12" rowHeight="35px">
+				<mat-grid-tile colspan="12" class="left">
+					<span class="blue-color">
+						&nbsp;{{ap.value}}
+					</span>
+				</mat-grid-tile>
+			</mat-grid-list>
+		</mat-list-option>
+	</mat-selection-list>
+</ion-content>

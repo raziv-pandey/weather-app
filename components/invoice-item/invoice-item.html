@@ -1,0 +1,42 @@
+
+<!-- <mat-grid-list cols="5">
+	<mat-grid-tile colspan="3">
+		<mat-list>
+			<mat-list-item><mat-checkbox [(ngModel)]="status" (change)="handleCheck.emit(status, invoice);"></mat-checkbox></mat-list-item>
+			<mat-list-item>Invoice No. {{invoice.refInvNo}}</mat-list-item>
+			<mat-list-item>Bill amount. {{invoice.fcNetAmt}}</mat-list-item>
+			<mat-list-item>Location. {{invoice.locationDisplayName}} ({{invoice.locationCode}})</mat-list-item>
+		</mat-list>
+	</mat-grid-tile>
+	<mat-grid-tile colspan="2">
+		<mat-list>
+			<mat-list-item>Bill Date : {{invoice.refInvDt}}</mat-list-item>
+			<mat-list-item>Due Date : {{invoice.dueDt}}</mat-list-item>
+			<mat-list-item>Age : {{invoice.ageInDays}}</mat-list-item>
+		</mat-list>
+	</mat-grid-tile>
+</mat-grid-list> -->
+
+<div>
+	<div>
+		<ion-checkbox [(ngModel)]="status" (ionChange)="onCheck()"></ion-checkbox>
+	</div>
+	<div>
+		Invoice No. {{invoice.refInvNo}}
+	</div>
+	<div>
+		Bill amount. {{invoice.fcNetAmt}}
+	</div>
+	<div>
+		Location. {{invoice.locationDisplayName}} ({{invoice.locationCode}})
+	</div>
+	<div>
+		Bill Date : {{invoice.refInvDt}}
+	</div>
+	<div>
+		Due Date : {{invoice.dueDt}}
+	</div>
+	<div>
+		age : {{invoice.ageInDays}}
+	</div>
+</div>

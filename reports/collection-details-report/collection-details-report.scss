@@ -1,0 +1,13 @@
+page-collection-details-report {
+	.sub-header-row {
+		.mat-grid-list {
+			width: 100%;
+			.mat-figure, b{
+				font-size: 0.75rem;
+				padding: 0 5px;
+				color: #222;
+			}
+		}
+	}
+	.orange { color: $confirm; }
+}

@@ -1,0 +1,26 @@
+page-customer-visit-report {
+    .content { background-color: #F4F7FE; }
+    section {
+        background-color: #FFFFFF;
+        margin: 13px 0;
+        padding: 15px 8px 0;
+    }
+    .woDetailsForm{
+        padding: 0px 4px 0 !important;
+    }
+    .woDetailsForm .mat-input-element,.productionDetails .mat-input-element{
+        color: #000;
+        font-weight: 700;
+    }
+    .cvr-button{
+        background: #f4f7fe !important;
+        line-height: 20px;
+    }
+    #action-section{
+        background-color: #EDF9FD;
+        padding: 15px 15px 0 !important;
+        margin-top: 0;
+        box-shadow: 0 -6px 0 #fff, 0 1px 6px rgba(0,0,0, .35);
+        border-radius: 0 0 5px 5px;
+    }
+}

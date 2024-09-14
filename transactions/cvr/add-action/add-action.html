@@ -1,0 +1,82 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<div class="title center"> Add Action</div>
+		<button mat-icon-button (click)="goToBack();">
+			<i class="icon icon-cancel p-cancel"></i>
+		</button>
+	</mat-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+	<form [formGroup]="actionForm" class="woDetailsForm">
+		<section class="productionDetails">
+		<!--Action Proposed-->
+		<mat-grid-list cols="1" rowHeight="55.5px">
+			<mat-form-field class="input-with-button input-with-icon">
+				<i class="icon icon-pending_trx"></i>
+				<input matInput type=text placeholder="Action Proposed *" value="" formControlName="ap" id="ap"
+					[class.invalid]="!actionForm.controls.ap.valid && (actionForm.controls.ap.dirty || submitAttempt)">
+				<button type="button" class="cvr-button" mat-icon-button (click)="openAction()">
+					<strong>AP</strong>
+				</button>
+			</mat-form-field>
+		</mat-grid-list>
+		<!--Select Employee-->
+		<mat-grid-list cols="1" class="select-pm" rowHeight="55.5px">
+			<select-search formControlName="employee" [data]="employees" placeholderLabel="Select Employee *"
+				itemViewValueKey="employeeFullName" [itemSearchValueKeys]="employeeSearchValueKeys" [multiple]="false"
+				[isIcon]="true" iconName="user" [isClearSelection]="false">
+			</select-search>
+		</mat-grid-list>
+		<!--Add Button-->
+		<mat-grid-list cols="1" rowHeight="35px">
+			<mat-grid-tile colspan="1">
+				<button class="full-width full-height" mat-raised-button color="primary" (click)="addAction();"
+					[disabled]="!actionForm.valid">ADD</button>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</section>
+	</form>		
+	<!--Action Loop-->
+	<section id="action-section" *ngIf="actionDetails.length > 0">
+		<mat-grid-list cols="1" rowHeight="20px" class="greyBg">
+			<mat-grid-tile colspan="1" class="left">
+				<strong>Action List</strong>
+			</mat-grid-tile>
+		</mat-grid-list>
+
+		<div *ngFor="let action of actionDetails; let i = index">
+			<mat-grid-list cols="12" rowHeight="25px">
+				<mat-grid-tile colspan="11" rowspan="2" class="left">
+					Resp. : {{action.actionP}}
+				</mat-grid-tile>
+				<mat-grid-tile colspan="1" rowspan="4" class="center">
+					<button mat-icon-button color="warn" class="center" (click)="deleteAction(i, action);">
+						<i class="icon icon-delete"></i>
+					</button>
+				</mat-grid-tile>
+				<mat-grid-tile colspan="11" rowspan="2" class="left">
+					Action: {{action.employee}}
+				</mat-grid-tile>
+			</mat-grid-list>
+			<!-- <mat-grid-list cols="12" rowHeight="30px">
+				<mat-grid-tile colspan="3" class="left">
+					Action:
+				</mat-grid-tile>
+				<mat-grid-tile colspan="9" class="left">
+					{{action.employee}}
+				</mat-grid-tile>
+			</mat-grid-list> -->
+			<mat-divider></mat-divider>
+		</div>
+	</section>
+</ion-content>
+<ion-footer>
+	<mat-grid-list cols="1" rowHeight="35px">
+		<mat-grid-tile colspan="1">
+			<button class="full-width full-height" mat-raised-button color="primary" (click)="confirmAction();"
+				[disabled]="actionDetails.length == 0">CONFIRM</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-footer>

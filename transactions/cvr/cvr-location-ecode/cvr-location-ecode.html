@@ -1,0 +1,53 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<div class="title center without-left-btn"> Select Location and Ecode </div>
+		 <button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-cancel"></i>
+		</button> 
+	</mat-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<form [formGroup]="locationEcodeForm">
+		<mat-grid-list cols="1" rowHeight="40px" *ngIf="loggedInUser" class="greyBg">
+			<mat-grid-tile colspan="1" class="left">
+				Customer : 	<span class="primary-dark-color"><strong> {{loggedInUser.value.employeeTitle}} {{loggedInUser.value.employeeFullName}} ({{loggedInUser.value.employeeCode}})</strong></span>
+			</mat-grid-tile>
+		</mat-grid-list>
+	
+		<mat-grid-list cols="1">
+			<select-search formControlName="location" [data]="locations" 
+			placeholderLabel="Select Location *" 
+			itemViewValueKey="value"
+			[itemSearchValueKeys]="locationSearchValueKeys"
+			[multiple]="false"
+			(selectionChange)="getEcodes();"
+			[isIcon]="true"
+			iconName="location"
+			[isClearSelection]="false">
+			</select-search>
+		</mat-grid-list>
+		<mat-grid-list cols="1">
+			<select-search formControlName="ecode" [data]="ecodes" 
+			placeholderLabel="Select EPPS Code *" 
+			itemViewValueKey="ecodeDisplayName"
+			itemViewValueKeyInBracket="eppsCode"
+			[itemSearchValueKeys]="ecodeSearchValueKeys"
+			[multiple]="false"
+			[isIcon]="true"
+			iconName="pending_trx"
+			[isClearSelection]="false">
+			</select-search>
+		</mat-grid-list>
+	</form>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer>
+	<mat-grid-list cols="1" rowHeight="40px">
+		<mat-grid-tile>
+			<button mat-raised-button class="full-width" color="primary" (click)="save();" 
+			[disabled]="!locationEcodeForm.valid ">SUBMIT</button>
+		</mat-grid-tile>
+    </mat-grid-list>
+</ion-footer>
+

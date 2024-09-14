@@ -1,0 +1,131 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center"> Collection Report </div>
+		<!-- <notification-icon></notification-icon> -->
+		<button mat-icon-button class="align-right" (click)="goToHome();">
+			<i class="icon icon-home"></i>
+		</button>
+	</mat-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<form [formGroup]="collectionReportForm">
+		<mat-expansion-panel [expanded]="isExpanded" (opened)="isExpanded = true" (closed)="isExpanded = false">
+			<mat-expansion-panel-header>
+				<mat-panel-title *ngIf="isExpanded"> Collapse </mat-panel-title>
+				<mat-panel-title *ngIf="!isExpanded"> Expand </mat-panel-title>
+			</mat-expansion-panel-header>
+			<mat-grid-list cols="1">
+				<select-search formControlName="location" [data]="locations" placeholderLabel="Select Location"
+					itemViewValueKey="value" [itemSearchValueKeys]="locationSearchValueKeys" [multiple]="true"
+					[isIcon]="true" iconName="location" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+			<mat-grid-list cols="1">
+				<select-search formControlName="customer" [data]="customers" placeholderLabel="Select Customers"
+					itemViewValueKey="customerDisplayName" [itemSearchValueKeys]="customerSearchValueKeys"
+					[isIcon]="true" iconName="user" [isClearSelection]="false">
+				</select-search>
+			</mat-grid-list>
+			<mat-grid-list cols="2" rowHeight="66.5px">
+				<mat-grid-tile>
+					<mat-form-field class="input-with-icon">
+						<i class="icon icon-calendar"></i>
+						<input matInput (click)="fromDate.open();" displayFormat="DD-MM-YY" formControlName="fromDate"
+							[matDatepicker]="fromDate" placeholder="From Date *"
+							[class.invalid]="!collectionReportForm.controls.fromDate.valid && (collectionReportForm.controls.fromDate.dirty || submitAttempt)"
+							readonly>
+						<mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+						<mat-datepicker #fromDate></mat-datepicker>
+					</mat-form-field>
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<mat-form-field class="input-with-icon">
+						<i class="icon icon-calendar"></i>
+						<input matInput (click)="toDate.open();" displayFormat="DD-MM-YY" formControlName="toDate"
+							[matDatepicker]="toDate" [max]="maxDate" placeholder="To Date *"
+							[class.invalid]="!collectionReportForm.controls.toDate.valid && (collectionReportForm.controls.toDate.dirty || submitAttempt)"
+							readonly>
+						<mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+						<mat-datepicker #toDate></mat-datepicker>
+					</mat-form-field>
+				</mat-grid-tile>
+			</mat-grid-list>
+			<!-- Period -->
+			<mat-radio-group formControlName="dayWise">
+				<mat-grid-list cols="1" rowHeight="25px">
+					<mat-grid-tile colspan="1" class="left">
+						<mat-checkbox class="" [(ngModel)]="checked" formControlName="periodActive">Period
+						</mat-checkbox>
+					</mat-grid-tile>
+				</mat-grid-list>
+				<mat-grid-list cols="4" rowHeight="35px" *ngIf="checked==true">
+					<mat-grid-tile class="left">
+						<mat-radio-button value="W">7 Days</mat-radio-button>
+					</mat-grid-tile>
+					<mat-grid-tile class="left">
+						<mat-radio-button value="D">15 Days</mat-radio-button>
+					</mat-grid-tile>
+					<mat-grid-tile class="left">
+						<mat-radio-button value="M">Month</mat-radio-button>
+					</mat-grid-tile>
+					<mat-grid-tile class="left">
+						<mat-radio-button value="Q">3Months</mat-radio-button>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-radio-group>
+		</mat-expansion-panel>
+	</form>
+	<div *ngIf="!isExpanded">
+		<div *ngIf="isShowData">
+			<div id="result" *ngIf="showResult$ | async">
+				<mat-grid-list cols="12" rowHeight="25px">
+					<mat-grid-tile class="left" colspan="6">
+						<b>Customer Name</b>
+					</mat-grid-tile>
+					<mat-grid-tile class="right" colspan="5">
+						<b>Value</b>
+					</mat-grid-tile>
+					<mat-grid-tile class="left" colspan="1">
+						&nbsp;
+					</mat-grid-tile>
+				</mat-grid-list>
+
+				<mat-grid-list class="altRow" cols="12" rowHeight="50px" *ngFor="let data of result"
+					(click)="showCollectionDetails(data);">
+					<mat-grid-tile class="left" colspan="6">
+						<span class="primary-dark-color">{{data.customerDispName}}</span>
+					</mat-grid-tile>
+					<mat-grid-tile class="right" colspan="5">
+						{{data.recievedAmnt | number : '1.2-2'}}
+					</mat-grid-tile>
+					<mat-grid-tile class="right" colspan="1">
+						<i class="icon icon-arrow-right"></i>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</div>
+		</div>
+	</div>
+	<mat-spinner *ngIf="isLoading" diameter="40" strokeWidth="2"></mat-spinner>
+</ion-content>
+<ion-footer class="center">
+	<div id="result">
+		<mat-grid-list cols="3" *ngIf="!isExpanded" rowHeight="40px">
+			<mat-grid-tile class="left" colspan="2">
+				<b>Total Collection</b>
+			</mat-grid-tile>
+			<mat-grid-tile class="right" colspan="1">
+				<b>{{totalCollection | number : '1.2-2'}}</b>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</div>
+	<mat-grid-list cols="1" *ngIf="isExpanded" rowHeight="40px">
+		<mat-grid-tile>
+			<button mat-raised-button class="full-width" color="primary" (click)="loadReport();"
+				[disabled]="isShowBtnDisabled || !collectionReportForm.valid">SHOW</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-footer>

@@ -1,0 +1,57 @@
+page-customer-outstanding {
+    .mat-toolbar {
+        .customer-name {
+            font-size: 1.2rem!important;
+        }
+        .outstanding-amount {
+            font-size: 2rem!important;
+            font-weight: bold;
+        }
+        .outstanding-text {
+            margin-top: -10px;
+            font-size: 0.8rem;
+        }
+        .credit-limit {
+            margin-top: -20px;
+            font-size: 0.8rem;
+        }
+    }
+    .footer {
+        padding-left: 5px;
+        .mat-figure { font-size: 0.8rem !important; }
+        .primary-color-dark { color: $primaryDark; }
+    }
+    .mat-selection-list {
+        padding: 0 !important;
+        .mat-list-option {
+            height: 127px;
+            &.altRow:nth-child(odd) {
+                &[aria-selected="true"] {
+                    background-color: #81D4FA!important;
+                }
+            }
+            &.altRow:nth-child(even) {
+                &[aria-selected="true"] {
+                    background-color: #B3E5FC!important;
+                }
+            }
+        }
+        .mat-list-item-content {
+            * { font-size: 0.8rem !important; }
+            padding: 5px!important;
+            .mat-list-text { padding-left: 5px!important; }
+        }
+    }
+    .search-wrapper {
+        margin: 5px 15px;
+    }
+    // .red{
+    //     color: red!important;
+    // }
+    // .gray{
+
+    // }
+    .mat-form-field-hide-placeholder .mat-select-placeholder {
+        color: #FF3737!important;
+    }
+}

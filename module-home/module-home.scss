@@ -1,0 +1,24 @@
+page-module-home {
+   .transHomeTab {
+        box-shadow: -1px -5px 10px $primaryLight;
+        .mat-list-item {
+            background-color: $alternateColor!important;
+        }
+        .icon {
+            transform: rotate(90deg);
+            transition: all 0.3s ease-in-out;
+        }
+    }
+    .mat-list-item {
+        &.active {
+            background-color: $white!important;
+            border-left: 2px solid $primaryColor;
+            a{
+                color: $primaryColor!important;
+                .icon {
+                    transform: rotate(0deg)!important;
+                }
+            }
+        }
+    }
+}

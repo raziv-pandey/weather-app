@@ -1,0 +1,36 @@
+<ion-header>
+	<mat-toolbar color="primary">
+		<button mat-icon-button (click)="gotoBack();">
+			<i class="icon icon-arrow-left"></i>
+		</button>
+		<div class="title center"> {{moduleId}} </div>
+		<!-- <notification-icon></notification-icon> -->
+		<button mat-icon-button class="align-right" (click)="goToHome();">
+			<i class="icon icon-home"></i>
+	   </button>
+	</mat-toolbar>
+</ion-header>
+<ion-content>
+	  <mat-grid-list cols="12" rowHeight="100%">
+		<mat-grid-tile [colspan]="4" class="transHomeTab">
+			<mat-list>
+				<mat-list-item class="altRow" *ngFor="let program of programs" [ngClass]="{active: currentProgram == program.programkey}">
+					<a (click)="setPrograms(program.programkey);">
+						{{program.displayName}}
+						<i class="icon icon-arrow-right"></i>
+					</a>
+				</mat-list-item>
+			</mat-list>
+		</mat-grid-tile>
+		<mat-grid-tile [colspan]="8">
+			<mat-list *ngIf="currentProgram">
+				<mat-list-item class="altRow" *ngFor="let p of programTypes[currentProgram]">
+					<a (click)="goToProgram(p);">
+						{{p.programDisplayName}}
+						<i class="icon icon-arrow-right"></i>
+					</a>
+				</mat-list-item>
+			</mat-list>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ion-content>
